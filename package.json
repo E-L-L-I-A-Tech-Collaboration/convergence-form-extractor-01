@@ -1,0 +1,43 @@
+{
+  "name": "hrm-hieromath-ledger-semiprime-factorizer",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "start": "node dist/server.cjs",
+    "lint": "tsc --noEmit",
+    "test:core": "tsx tests/core.test.ts",
+    "test:gnfs": "tsx tests/gnfs.test.ts",
+    "test:billing": "tsx tests/billing.test.ts",
+    "test": "npm run test:core && npm run test:gnfs && npm run test:billing"
+  },
+  "dependencies": {
+    "@google/genai": "^2.21.0",
+    "express": "^5.1.0",
+    "lucide-react": "^1.40.0",
+    "pg": "^8.16.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "@types/pg": "^8.15.5",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "latest",
+    "concurrently": "latest",
+    "esbuild": "^0.28.2",
+    "@types/supertest": "^6.0.3",
+    "pg-mem": "^3.0.5",
+    "supertest": "^7.1.4",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vite": "^8.2.2"
+  }
+}

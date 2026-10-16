@@ -1,0 +1,8 @@
+{
+  "name": "Convergence Form Extractor",
+  "description": "Convergence Form Extractor: An interactive platform that monitors, assesses, and enhances generative human creativity with AI assistance, augmented by cognitive HRM modeling and a verification ledger under the hood.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

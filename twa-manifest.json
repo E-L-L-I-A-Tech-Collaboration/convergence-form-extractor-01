@@ -1,0 +1,34 @@
+{
+  "packageId": "com.axiomzetainnovations.convergenceform",
+  "host": "convergenceform.axiomzetainnovations.com",
+  "name": "convergence-form-extractor.ai",
+  "launcherName": "convergence-form-extractor.ai",
+  "themeColor": "#07101d",
+  "navigationColor": "#07101d",
+  "backgroundColor": "#ffffff",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://convergenceform.axiomzetainnovations.com/pwa-512x512.png",
+  "maskableIconUrl": "https://convergenceform.axiomzetainnovations.com/pwa-maskable-512x512.png",
+  "appVersionName": "3.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [
+    {
+      "name": "Breathing Sanctuary",
+      "shortName": "Sanctuary",
+      "url": "/?tab=emotional-regulation",
+      "icon": "https://convergenceform.axiomzetainnovations.com/pwa-192x192.png"
+    }
+  ],
+  "webManifestUrl": "https://convergenceform.axiomzetainnovations.com/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  },
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  }
+}
