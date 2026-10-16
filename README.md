@@ -9,11 +9,11 @@ Convergence Form Extractor is an AI-assisted creativity studio for practicing di
 - Live cognitive metrics for flow, divergence, flexibility, entropy, and ideation velocity
 - AI-assisted prompts and session assessment powered by Gemini
 - A progress dashboard with assessment history and coaching feedback
-- Stripe subscription access control
+- Google Play Store digital app distribution and account authentication
 
 ## Requirements
 
-- Node.js 24.x
+- Node.js 20.19 or later
 - npm
 
 ## Local development
@@ -25,7 +25,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`.
+Open `http://localhost:3000`.
 
 ## Configuration
 
@@ -36,57 +36,39 @@ Create a `.env` file with the integrations you intend to use:
 GEMINI_API_KEY=your-gemini-api-key
 GEMINI_MODEL=gemini-3.8-flash
 
-# Required to enable Stripe subscription checkout
-STRIPE_SECRET_KEY=sk_...
-STRIPE_PRICE_ID=price_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-APP_URL=https://your-vercel-domain.vercel.app
+# Google Play Store Distribution
+GOOGLE_PLAY_PACKAGE_NAME=com.axiomzetainnovations.convergenceform
+APP_URL=http://localhost:3000
 BILLING_COOKIE_SECRET=use-a-long-random-secret
 
-# Required for persistent accounts and subscription entitlements
+# Required for persistent accounts and verification ledger
 DATABASE_URL=postgresql://...
 ```
 
-Convergence Form Extractor stores account identity, profile fields, and entitlement state in PostgreSQL; use a managed Postgres provider in production. Stripe is the access source of truth: the subscribe action creates a Stripe Checkout Session for the configured monthly price, so no card details touch this application. Configure `STRIPE_PRICE_ID` as a recurring monthly price for the studio subscription.
+## Google Play Store & Account Operations
 
-## Billing operations
-
-Users create an email/password account before being sent to Stripe Checkout. A completed checkout grants studio access to the authenticated account, and users can sign in on another device to restore paid access after the Stripe webhook has been processed. Passwords are salted and hashed using Node's `scrypt`; session cookies are signed, HttpOnly convenience credentials and are never the entitlement source of truth.
-
-Configure a webhook endpoint at `https://your-domain.example/api/billing/webhook` using `STRIPE_WEBHOOK_SECRET`. Subscribe it to:
-
-- `checkout.session.completed`
-- `customer.subscription.created`
-- `customer.subscription.updated`
-- `customer.subscription.deleted`
-- `invoice.payment_failed`
-
-The webhook is signature-verified and idempotent. It updates the persistent account entitlement, and premium API access is denied unless that record is currently `active` or `trialing`. Enable the Stripe Customer Portal in the Stripe Dashboard so the in-app **Manage billing** action can open it.
+Convergence Form Extractor is packaged and distributed through the Google Play Store (via Trusted Web Activity / TWA). Account authentication uses email and salted/hashed credentials via Node `scrypt`. Digital orders and licenses purchased through Google Play can be linked to member accounts via the `/api/billing/play-store-verify` endpoint.
 
 ## Production and Vercel
 
 The repository includes a Vercel-ready configuration:
 
 - The Vite client build is published from `dist`.
-- The Express API is served through `api/index.ts`. Nested `/api/**` paths are rewritten to that function (Vercel catch-all files only match one segment on Vite projects).
-- The deployment uses Node.js 24.
+- The Express API is served through `api/[...path].ts`.
+- The deployment uses Node.js 20.
 
 In the Vercel project settings, configure these environment variables:
 
 ```text
 GEMINI_API_KEY
 GEMINI_MODEL
-STRIPE_SECRET_KEY
-STRIPE_PRICE_ID
-STRIPE_WEBHOOK_SECRET
+GOOGLE_PLAY_PACKAGE_NAME=com.axiomzetainnovations.convergenceform
 APP_URL=https://your-vercel-domain.example
 BILLING_COOKIE_SECRET
 DATABASE_URL
 ```
 
-`DATABASE_URL` should be a pooled PostgreSQL connection string from a managed provider such as Neon, Supabase, or Vercel Postgres. If `DATABASE_URL` is missing or empty, the server uses the first non-empty of `POSTGRES_PRISMA_URL`, `POSTGRES_URL`, and `POSTGRES_URL_NON_POOLING` (the names written by the Vercel Supabase integration). In Vercel, add variables under **Settings > Environment Variables**, select **Production** (and **Preview** if needed), then redeploy. Environment variables added after a deployment do not apply to an existing deployment. Set `APP_URL` to the exact production URL used by the deployed application so Stripe Checkout and the Customer Portal can return users correctly. Do not commit `.env` files or Stripe secrets.
-
-For the standalone server, copy `.env.example` to `.env` before running `npm run dev` or `npm start`. The server loads that file automatically on Node 24. Account registration and login require a resolved database URL and `BILLING_COOKIE_SECRET`; `/api/health` exposes `databaseConfigured`, `geminiConfigured`, and boolean `envPresent` flags (never secret values) so deployment configuration can be checked without exposing secrets.
+Set `APP_URL` to the exact production URL used by the deployed application.
 
 ## Validation
 
