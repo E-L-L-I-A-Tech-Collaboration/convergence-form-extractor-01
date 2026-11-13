@@ -1,11 +1,13 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.axiomzetainnovations.convergenceform",
       "sha256_cert_fingerprints": [
-        "14:6D:E9:7A:B5:E8:11:F2:C0:EB:8F:D6:5A:F3:3B:11:E9:56:4C:C1:92:43:9C:FE:E8:EE:C6:62:38:09:68:54"
+        "C6:43:1E:E5:11:EB:3D:0F:E8:FA:5C:4F:E0:4A:61:17:72:F8:F3:2E:41:00:63:8A:AD:F1:41:51:99:99:96:0F"
       ]
     }
   }
