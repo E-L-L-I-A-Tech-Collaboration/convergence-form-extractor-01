@@ -1,11 +1,11 @@
 import { GoogleGenAI } from '@google/genai';
-import { BinarySemanticLedger } from '../src/ledger';
-import { createInitialHRMState, transitionHRM } from '../src/augmentation';
-import { clamp } from '../src/math';
+import { BinarySemanticLedger } from '../src/ledger.js';
+import { createInitialHRMState, transitionHRM } from '../src/augmentation.js';
+import { clamp } from '../src/math.js';
 import type {
   HRMState,
   SearchTelemetry,
-} from '../src/types';
+} from '../src/types.js';
 import type {
   CreativityExercise,
   UserCreativeIdea,
@@ -13,7 +13,7 @@ import type {
   CreativeAssessmentResult,
   AIAssistResponse,
   DimensionalScores
-} from '../src/creativity-types';
+} from '../src/creativity-types.js';
 
 interface ActiveSession {
   id: string;

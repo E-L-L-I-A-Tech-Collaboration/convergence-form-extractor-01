@@ -1,6 +1,6 @@
-import { clamp, seedFromString, XorShift64 } from './math';
-import { compileDirective } from './hieromath';
-import type { AdvisoryGuidance, HRMState, HRMTransitionReport, HieroObject, Method, SearchTelemetry } from './types';
+import { clamp, seedFromString, XorShift64 } from './math.js';
+import { compileDirective } from './hieromath.js';
+import type { AdvisoryGuidance, HRMState, HRMTransitionReport, HieroObject, Method, SearchTelemetry } from './types.js';
 
 const N = 12;
 const REGIONS = 3;

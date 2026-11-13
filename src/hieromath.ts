@@ -1,5 +1,5 @@
-import { clamp, clampInt } from './math';
-import type { AdvisoryGuidance, HRMState, HieroObject, Method, SearchDirectiveValue } from './types';
+import { clamp, clampInt } from './math.js';
+import type { AdvisoryGuidance, HRMState, HieroObject, Method, SearchDirectiveValue } from './types.js';
 
 function avg(xs: number[]): number {
   return xs.reduce((a, b) => a + b, 0) / Math.max(1, xs.length);

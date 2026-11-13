@@ -1,4 +1,4 @@
-import type { CreativityExercise } from './creativity-types';
+import type { CreativityExercise } from './creativity-types.js';
 
 export const CREATIVITY_EXERCISES: CreativityExercise[] = [
   {

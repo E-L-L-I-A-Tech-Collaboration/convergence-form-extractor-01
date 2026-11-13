@@ -2,9 +2,9 @@ import { spawn } from 'node:child_process';
 import { mkdtemp, readdir, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { AugmentationController } from '../src/augmentation';
-import { BinarySemanticLedger } from '../src/ledger';
-import { assessPrimality, bitLength, isqrt, primesUpTo } from '../src/math';
+import { AugmentationController } from '../src/augmentation.js';
+import { BinarySemanticLedger } from '../src/ledger.js';
+import { assessPrimality, bitLength, isqrt, primesUpTo } from '../src/math.js';
 import type {
   FactorizationRequest,
   FactorizationResult,
@@ -13,7 +13,7 @@ import type {
   HieroObject,
   SearchTelemetry,
   SemiprimeStatus
-} from '../src/types';
+} from '../src/types.js';
 
 export interface GnfsRunnerOptions {
   cadoPath?: string;

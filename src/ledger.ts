@@ -1,4 +1,4 @@
-import type { LedgerEvent, LedgerSnapshot } from './types';
+import type { LedgerEvent, LedgerSnapshot } from './types.js';
 
 function canonicalize(value: unknown): string {
   if (value === null) return 'null';

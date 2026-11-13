@@ -3,10 +3,10 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { GoogleGenAI } from '@google/genai';
-import { runGnfsFactorization } from './server/gnfs-runner';
-import { BillingService } from './server/billing';
-import type { FactorizationRequest, GnfsStreamMessage } from './src/types';
-import { CREATIVITY_EXERCISES } from './src/creativity-exercises';
+import { runGnfsFactorization } from './server/gnfs-runner.js';
+import { BillingService } from './server/billing.js';
+import type { FactorizationRequest, GnfsStreamMessage } from './src/types.js';
+import { CREATIVITY_EXERCISES } from './src/creativity-exercises.js';
 import {
   startCreativeSession,
   updateSessionTelemetry,
@@ -16,7 +16,7 @@ import {
   generateCognitiveReappraisal,
   logEmotionalRegulationSession,
   getEmotionalSessionsHistory
-} from './server/creativity-engine';
+} from './server/creativity-engine.js';
 
 const app = express();
 const port = Number(process.env.PORT || 5173);
@@ -39,7 +39,7 @@ app.get('/.well-known/assetlinks.json', (_req, res) => {
 
 export default app;
 
-async function requireAuthenticated(req: express.Request, res: express.Response): Promise<import('./server/billing').BillingUser | null> {
+async function requireAuthenticated(req: express.Request, res: express.Response): Promise<import('./server/billing.js').BillingUser | null> {
   const user = await billing.authenticate(req);
   if (!user) res.status(401).json({ error: 'Sign in to continue.' });
   return user;
