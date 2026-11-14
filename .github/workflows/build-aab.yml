@@ -1,0 +1,94 @@
+name: Build signed AAB
+
+# Builds the signed Android App Bundle for the Play Store using Bubblewrap.
+# Trigger manually from the Actions tab. The signed .aab is uploaded as an artifact.
+#
+# Required repository secrets:
+#   KEYSTORE_BASE64    - base64 of android.keystore (alias "android")
+#   KEYSTORE_PASSWORD  - keystore password
+#   KEY_PASSWORD       - key password
+#
+# Notes:
+# - `bubblewrap update` runs before `bubblewrap build`: in a fresh checkout
+#   `build` prompts "would you like to regenerate your project?" on stdin,
+#   which hangs/crashes in CI. `update --skipVersionUpgrade` generates the
+#   project and the manifest checksum non-interactively, so `build` then
+#   runs with no prompts.
+# - The signed bundle is app-release-bundle.aab (Bubblewrap >= 1.27).
+#   The upload uses a glob so an older Bubblewrap's app-release-signed.aab
+#   would also be picked up.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Install Android SDK
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq unzip > /dev/null
+          export ANDROID_HOME="$HOME/android-sdk"
+          mkdir -p "$ANDROID_HOME/cmdline-tools"
+          curl -sL -o /tmp/cmdtools.zip \
+            https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q /tmp/cmdtools.zip -d "$ANDROID_HOME/cmdline-tools"
+          mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
+          # Bubblewrap's SDK validation requires a `tools/` (or `bin/`)
+          # directory at the SDK root; modern cmdline-tools live under
+          # cmdline-tools/latest instead, so link it into place.
+          ln -s "$ANDROID_HOME/cmdline-tools/latest" "$ANDROID_HOME/tools"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager "platforms;android-36" "build-tools;36.1.0"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
+
+      - name: Configure Bubblewrap
+        # Fresh runners have no ~/.bubblewrap/config.json, so Bubblewrap's
+        # first run prompts "Do you want Bubblewrap to install the JDK?"
+        # on stdin and dies in CI (exit 130). Pre-writing the config
+        # with the JDK/SDK paths setup-java and sdkmanager installed
+        # skips the prompt entirely.
+        run: |
+          mkdir -p ~/.bubblewrap
+          printf '{\n  "jdkPath": "%s",\n  "androidSdkPath": "%s"\n}\n' "$JAVA_HOME" "$ANDROID_HOME" > ~/.bubblewrap/config.json
+
+      - name: Restore release keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android.keystore
+
+      - name: Generate Android project
+        run: bubblewrap update --skipVersionUpgrade
+
+      - name: Build signed AAB
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: bubblewrap build
+
+      - name: List build outputs
+        run: ls -la *.aab *.apk 2>/dev/null || true
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mindforge-app-bundle
+          path: app-release*.aab
+          if-no-files-found: error

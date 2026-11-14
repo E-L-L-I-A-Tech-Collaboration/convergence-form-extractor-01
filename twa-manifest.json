@@ -7,6 +7,8 @@
   "navigationColor": "#07101d",
   "backgroundColor": "#ffffff",
   "enableNotifications": true,
+  "splashScreenFadeOutDuration": 300,
+  "minSdkVersion": 24,
   "startUrl": "/",
   "iconUrl": "https://convergenceform.az-emergent-nexus.online/pwa-512x512.png",
   "maskableIconUrl": "https://convergenceform.az-emergent-nexus.online/pwa-maskable-512x512.png",
