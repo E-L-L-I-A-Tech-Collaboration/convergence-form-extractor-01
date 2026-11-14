@@ -15,6 +15,8 @@ import { AssessmentModal } from './components/AssessmentModal';
 import { EmotionalRegulationSanctuary } from './components/EmotionalRegulationSanctuary';
 import { UserProfileModal } from './components/UserProfileModal';
 import { AndroidBottomNav } from './components/AndroidBottomNav';
+import { PaywallModal } from './components/PaywallModal';
+import { useSubscription } from './billing/useSubscription';
 import { safeFetchJson } from './api-client';
 import { getStoredGuiTheme, applyThemeToDom } from './gui-theme';
 
@@ -25,6 +27,10 @@ export default function App() {
   const [currentAssessment, setCurrentAssessment] = useState<CreativeAssessmentResult | null>(null);
   const [history, setHistory] = useState<CreativeAssessmentResult[]>([]);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isPaywallOpen, setIsPaywallOpen] = useState(false);
+  // Google Play subscription (Digital Goods API). In the Android app this
+  // gates entry; on the open web the API is absent and the app runs ungated.
+  const sub = useSubscription();
   const [profileModalTab, setProfileModalTab] = useState<'profile' | 'create' | 'profiles' | 'account' | 'stats'>('profile');
 
   const handleOpenProfile = (tab: 'profile' | 'create' | 'profiles' = 'profile') => {
@@ -155,6 +161,30 @@ export default function App() {
     setHistory(prev => [result, ...prev]);
   };
 
+  // Hard gate (Android app only): render no studio UI until the
+  // subscription check resolves, and none at all while there is no
+  // active subscription. 'premium' and 'unavailable' (open web) fall
+  // through to the full studio below.
+  if (sub.status === 'loading') {
+    return (
+      <div className="paywall-loading">
+        <p>Checking subscription…</p>
+      </div>
+    );
+  }
+  if (sub.status === 'free') {
+    return (
+      <div className="studio-app-shell">
+        <PaywallModal
+          isOpen
+          blocking
+          onClose={() => {}}
+          sub={sub}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="studio-app-shell">
       <Header
@@ -256,7 +286,22 @@ export default function App() {
         <p>
           Convergence Form Extractor • Augmented by Cognitive HRM Modeling • Multi-Persona Creative Sanctuary
         </p>
+        <button
+          type="button"
+          className="btn-secondary btn-sm"
+          onClick={() => setIsPaywallOpen(true)}
+        >
+          Manage subscription
+        </button>
       </footer>
+
+      {/* Google Play Premium Paywall (info/purchase sheet; the hard
+          gate for unsubscribed Android users renders earlier) */}
+      <PaywallModal
+        isOpen={isPaywallOpen}
+        onClose={() => setIsPaywallOpen(false)}
+        sub={sub}
+      />
     </div>
   );
 }
