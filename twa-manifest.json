@@ -19,7 +19,7 @@
       "name": "Breathing Sanctuary",
       "shortName": "Sanctuary",
       "url": "/?tab=emotional-regulation",
-      "icon": "https://convergenceform.az-emergent-nexus.online/pwa-192x192.png"
+      "chosenIconUrl": "https://convergenceform.az-emergent-nexus.online/pwa-192x192.png"
     }
   ],
   "webManifestUrl": "https://convergenceform.az-emergent-nexus.online/manifest.webmanifest",
