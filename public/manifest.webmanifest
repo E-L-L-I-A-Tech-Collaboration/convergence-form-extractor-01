@@ -1,8 +1,8 @@
 {
   "id": "com.axiomzetainnovations.convergenceform",
-  "name": "convergence-form-extractor.ai",
-  "short_name": "convergence-form-extractor.ai",
-  "description": "Convergence Form Extractor: An interactive platform that monitors, assesses, and enhances generative human creativity with AI assistance, augmented by cognitive HRM modeling and a verification ledger under the hood.",
+  "name": "Mind Forge",
+  "short_name": "Mind Forge",
+  "description": "Mind Forge: An interactive platform that monitors, assesses, and enhances generative human creativity with AI assistance, augmented by cognitive HRM modeling and a verification ledger under the hood.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -15,18 +15,6 @@
   "categories": ["health", "lifestyle", "productivity", "education"],
   "prefer_related_applications": false,
   "icons": [
-    {
-      "src": "https://convergence-form-extractor.ai.studio/favicon.ico",
-      "type": "image/x-icon",
-      "isSquare": false,
-      "isPng": false,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 0,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
-    },
     {
       "src": "/pwa-192x192.png",
       "sizes": "192x192",

@@ -1,8 +1,8 @@
 {
   "packageId": "com.axiomzetainnovations.convergenceform",
   "host": "convergenceform.az-emergent-nexus.online",
-  "name": "convergence-form-extractor.ai",
-  "launcherName": "convergence-form-extractor.ai",
+  "name": "Mind Forge",
+  "launcherName": "Mind Forge",
   "themeColor": "#07101d",
   "navigationColor": "#07101d",
   "backgroundColor": "#ffffff",
@@ -12,8 +12,8 @@
   "startUrl": "/",
   "iconUrl": "https://convergenceform.az-emergent-nexus.online/pwa-512x512.png",
   "maskableIconUrl": "https://convergenceform.az-emergent-nexus.online/pwa-maskable-512x512.png",
-  "appVersionName": "3.0.0",
-  "appVersionCode": 1,
+  "appVersionName": "3.0.1",
+  "appVersionCode": 2,
   "shortcuts": [
     {
       "name": "Breathing Sanctuary",
